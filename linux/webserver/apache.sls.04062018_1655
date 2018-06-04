@@ -1,0 +1,25 @@
+Demarrage service Apache:
+  service.running:
+    - name: httpd
+    - enable: True
+    - watch:
+      - pkg: httpd
+      - file: /etc/httpd/conf/httpd.conf
+
+Installation Apache sur Linux:
+  pkg.installed:
+    - name: httpd
+
+Copie des fichiers de configuration:
+  file.managed:
+    - name: /etc/httpd/conf/httpd.conf
+    - source: salt://linux/webserver/files/httpd.conf
+    - require:
+      - pkg: 'Installation Apache sur Linux'
+
+Ouverture de port FireWall:
+  firewalld.present:
+    - name: public
+    - services:
+      - http
+    - prune_services: False
